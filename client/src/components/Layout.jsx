@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { 
   LayoutDashboard, 
@@ -8,7 +9,8 @@ import {
   Settings, 
   TrendingUp, 
   LogOut,
-  Calendar 
+  Calendar,
+  Clock
 } from 'lucide-react';
 
 const navItems = [
@@ -20,14 +22,25 @@ const navItems = [
 
 export default function Layout({ user, isPro, onLogout }) {
   const navigate = useNavigate();
+  
+  // Live Clock State
+  const [time, setTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => setTime(new Date()), 1000);
+    return () => clearInterval(timer); // Cleanup on unmount
+  }, []);
+
+  const formattedDate = time.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+  const formattedTime = time.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg)' }}>
       {/* Sidebar */}
       <aside style={{
         width: 220, background: 'var(--surface)', borderRight: '1px solid var(--border)',
         display: 'flex', flexDirection: 'column', padding: '24px 0', position: 'fixed',
-        top: 0, left: 0, bottom: 0, zIndex: 100,
+        top: 0, left: 0, bottom: 0, zIndex: 100, transition: 'background 0.3s, border 0.3s'
       }}>
         {/* Logo */}
         <div style={{ padding: '0 20px 32px', display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -48,9 +61,9 @@ export default function Layout({ user, isPro, onLogout }) {
             <NavLink key={to} to={to} style={({ isActive }) => ({
               display: 'flex', alignItems: 'center', gap: 10,
               padding: '10px 12px', borderRadius: 8, textDecoration: 'none',
-              color: isActive ? 'var(--accent2)' : 'var(--text)', /* Changed to var(--text) for better visibility */
+              color: isActive ? 'var(--accent)' : 'var(--text)', 
               background: isActive ? 'rgba(124,106,247,0.12)' : 'transparent',
-              fontSize: 13, fontWeight: 500, transition: 'all 0.15s',
+              fontSize: 13, fontWeight: 600, transition: 'all 0.15s',
               opacity: isActive ? 1 : 0.7
             })}>
               <Icon size={16} />
@@ -62,9 +75,9 @@ export default function Layout({ user, isPro, onLogout }) {
           <NavLink to="/settings" style={({ isActive }) => ({
               display: 'flex', alignItems: 'center', gap: 10,
               padding: '10px 12px', borderRadius: 8, textDecoration: 'none',
-              color: isActive ? 'var(--accent2)' : 'var(--text)',
+              color: isActive ? 'var(--accent)' : 'var(--text)',
               background: isActive ? 'rgba(124,106,247,0.12)' : 'transparent',
-              fontSize: 13, fontWeight: 500, marginTop: 'auto',
+              fontSize: 13, fontWeight: 600, marginTop: 'auto',
               opacity: isActive ? 1 : 0.7
             })}>
               <Settings size={16} />
@@ -80,7 +93,7 @@ export default function Layout({ user, isPro, onLogout }) {
               display: 'flex', alignItems: 'center', gap: 10, padding: '8px', 
               cursor: 'pointer', borderRadius: 8, transition: 'background 0.2s' 
             }}
-            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(124,106,247,0.05)'}
+            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(124,106,247,0.08)'}
             onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
           >
             <div style={{
@@ -88,8 +101,8 @@ export default function Layout({ user, isPro, onLogout }) {
               background: 'linear-gradient(135deg, var(--accent), #ec4899)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               fontSize: 14, fontWeight: 800, 
-              color: '#ffffff', /* Forces pure white so the letter NEVER vanishes */
-              textShadow: '0 1px 2px rgba(0,0,0,0.2)',
+              color: '#ffffff', // FORCED PURE WHITE
+              textShadow: '0px 2px 4px rgba(0,0,0,0.6)', // STRONG SHADOW
               flexShrink: 0,
             }}>
               {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
@@ -98,7 +111,7 @@ export default function Layout({ user, isPro, onLogout }) {
               <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{user?.name || 'User'}</div>
               <div 
                 onClick={(e) => { e.stopPropagation(); navigate('/subscription'); }}
-                style={{ fontSize: 11, color: isPro ? 'var(--green)' : 'var(--accent2)', fontWeight: 600, cursor: 'pointer' }}
+                style={{ fontSize: 11, color: isPro ? 'var(--green)' : 'var(--accent)', fontWeight: 700, cursor: 'pointer' }}
               >
                 {isPro ? 'Pro Plan' : 'Basic Plan'}
               </div>
@@ -111,8 +124,10 @@ export default function Layout({ user, isPro, onLogout }) {
               width: '100%', display: 'flex', alignItems: 'center', gap: 10,
               padding: '10px 12px', borderRadius: 8, border: 'none',
               background: 'transparent', color: 'var(--red)', fontSize: 13,
-              fontWeight: 600, cursor: 'pointer', marginTop: 8
+              fontWeight: 600, cursor: 'pointer', marginTop: 8, transition: '0.2s'
             }}
+            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(248, 113, 113, 0.1)'}
+            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
           >
             <LogOut size={16} />
             Logout
@@ -121,37 +136,43 @@ export default function Layout({ user, isPro, onLogout }) {
       </aside>
 
       {/* Main Content Area */}
-      <main style={{ flex: 1, marginLeft: 220, minHeight: '100vh', background: 'var(--bg)' }}>
+      <main style={{ flex: 1, marginLeft: 220, minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
         {/* Top bar */}
         <header style={{
-          height: 56, borderBottom: '1px solid var(--border)',
+          height: 64, borderBottom: '1px solid var(--border)',
           display: 'flex', alignItems: 'center', justifyContent: 'flex-end',
-          padding: '0 28px', gap: 12, position: 'sticky', top: 0,
-          background: 'var(--bg)', zIndex: 50,
+          padding: '0 28px', gap: 16, position: 'sticky', top: 0,
+          background: 'var(--bg)', zIndex: 50, transition: 'background 0.3s, border 0.3s'
         }}>
           
-          {/* Calendar Button - Now Functional */}
-          <button 
-            onClick={() => alert("Calendar schedule opening soon...")}
-            style={{
-              width: 34, height: 34, borderRadius: 8, background: 'var(--surface)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: 'var(--text)', /* Changed from muted to text */
-              border: '1px solid var(--border)', cursor: 'pointer'
-            }}
-          >
-            <Calendar size={16} />
-          </button>
+          {/* LIVE DIGITAL CLOCK & DATE */}
+          <div style={{ 
+            display: 'flex', alignItems: 'center', gap: 16, 
+            background: 'var(--surface)', padding: '8px 16px', 
+            borderRadius: 12, border: '1px solid var(--border)' 
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'var(--text)', fontSize: 12, fontWeight: 600 }}>
+              <Calendar size={14} color="var(--accent)" />
+              {formattedDate}
+            </div>
+            <div style={{ width: 1, height: 14, background: 'var(--border)' }} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'var(--text)', fontSize: 13, fontWeight: 700, fontFamily: 'var(--font-mono)' }}>
+              <Clock size={14} color="var(--accent)" />
+              {formattedTime}
+            </div>
+          </div>
           
-          {/* Bell Button - Now Functional */}
+          {/* Bell Button */}
           <button 
             onClick={() => alert("You have 0 new notifications.")}
             style={{
-              width: 34, height: 34, borderRadius: 8, background: 'var(--surface)',
+              width: 38, height: 38, borderRadius: 10, background: 'var(--surface)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: 'var(--text)', /* Changed from muted to text */
-              border: '1px solid var(--border)', cursor: 'pointer'
+              color: 'var(--text)', border: '1px solid var(--border)', cursor: 'pointer',
+              transition: '0.2s'
             }}
+            onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+            onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
           >
             <Bell size={16} />
           </button>
@@ -160,22 +181,19 @@ export default function Layout({ user, isPro, onLogout }) {
           <button 
             onClick={() => navigate('/settings')}
             style={{
-              width: 34, height: 34, borderRadius: 8, background: 'var(--surface)',
+              width: 38, height: 38, borderRadius: 10, background: 'var(--surface)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: 'var(--text)', /* Changed from muted to text */
-              border: '1px solid var(--border)', cursor: 'pointer'
+              color: 'var(--text)', border: '1px solid var(--border)', cursor: 'pointer',
+              transition: '0.2s'
             }}
+            onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+            onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
           >
             <Settings size={16} />
           </button>
-
-          <div style={{ height: 24, width: 1, background: 'var(--border)' }} />
-          <span style={{ fontSize: 12, color: 'var(--text)', fontWeight: 500, fontFamily: 'var(--font-mono)' }}>
-            {new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
-          </span>
         </header>
 
-        <div style={{ padding: '28px' }}>
+        <div style={{ padding: '32px', flex: 1 }}>
           <Outlet />
         </div>
       </main>
