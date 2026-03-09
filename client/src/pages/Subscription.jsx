@@ -17,8 +17,8 @@ export default function Subscription({ isPro, onActivate, onCancel }) {
   };
 
   return (
-    <div style={{ maxWidth: 800, margin: "0 auto", textAlign: "center" }} className="fade-up fade-up-1">
-      <h1 style={{ fontSize: 28, fontWeight: 800, marginBottom: 10, fontFamily: 'var(--font-display)' }}>
+    <div style={{ maxWidth: 800, margin: "0 auto", textAlign: "center", color: 'var(--text)' }} className="fade-up fade-up-1">
+      <h1 style={{ fontSize: 28, fontWeight: 800, marginBottom: 10, fontFamily: 'var(--font-display)', color: 'var(--text)' }}>
         {isPro ? "You are a Pro Member" : "Upgrade to Pro"}
       </h1>
       <p style={{ color: "var(--muted)", marginBottom: 40, fontSize: 15 }}>
@@ -40,8 +40,8 @@ export default function Subscription({ isPro, onActivate, onCancel }) {
             transition: '0.3s'
           }}
         >
-          <h3 style={{ fontSize: 18, fontWeight: 700 }}>Basic</h3>
-          <div style={{ fontSize: 32, fontWeight: 800, margin: "20px 0", fontFamily: 'var(--font-mono)' }}>
+          <h3 style={{ fontSize: 18, fontWeight: 700, color: 'var(--text)' }}>Basic</h3>
+          <div style={{ fontSize: 32, fontWeight: 800, margin: "20px 0", fontFamily: 'var(--font-mono)', color: 'var(--text)' }}>
             $0<span style={{ fontSize: 14, color: "var(--muted)", fontWeight: 400 }}>/mo</span>
           </div>
           <ul
@@ -54,10 +54,10 @@ export default function Subscription({ isPro, onActivate, onCancel }) {
               gap: 12,
             }}
           >
-            <li style={{ fontSize: 13, display: 'flex', alignItems: 'center', gap: 8 }}>
+            <li style={{ fontSize: 13, display: 'flex', alignItems: 'center', gap: 8, color: 'var(--text)' }}>
               <Check size={14} color="var(--green)" /> 5 Monthly Budgets
             </li>
-            <li style={{ fontSize: 13, display: 'flex', alignItems: 'center', gap: 8 }}>
+            <li style={{ fontSize: 13, display: 'flex', alignItems: 'center', gap: 8, color: 'var(--text)' }}>
               <Check size={14} color="var(--green)" /> Basic Analytics
             </li>
           </ul>
@@ -97,8 +97,8 @@ export default function Subscription({ isPro, onActivate, onCancel }) {
             </div>
           )}
           
-          <h3 style={{ fontSize: 18, fontWeight: 700 }}>Pro</h3>
-          <div style={{ fontSize: 32, fontWeight: 800, margin: "20px 0", fontFamily: 'var(--font-mono)' }}>
+          <h3 style={{ fontSize: 18, fontWeight: 700, color: 'var(--text)' }}>Pro</h3>
+          <div style={{ fontSize: 32, fontWeight: 800, margin: "20px 0", fontFamily: 'var(--font-mono)', color: 'var(--text)' }}>
             $12<span style={{ fontSize: 14, color: "var(--muted)", fontWeight: 400 }}>/mo</span>
           </div>
           
@@ -113,13 +113,13 @@ export default function Subscription({ isPro, onActivate, onCancel }) {
               marginBottom: 32,
             }}
           >
-            <li style={{ fontSize: 13, display: 'flex', alignItems: 'center', gap: 8 }}>
+            <li style={{ fontSize: 13, display: 'flex', alignItems: 'center', gap: 8, color: 'var(--text)' }}>
               <Zap size={14} color="var(--accent)" fill="var(--accent)" /> Unlimited Budgets
             </li>
-            <li style={{ fontSize: 13, display: 'flex', alignItems: 'center', gap: 8 }}>
+            <li style={{ fontSize: 13, display: 'flex', alignItems: 'center', gap: 8, color: 'var(--text)' }}>
               <Shield size={14} color="var(--accent)" fill="var(--accent)" /> Advanced D3 Analytics
             </li>
-            <li style={{ fontSize: 13, display: 'flex', alignItems: 'center', gap: 8 }}>
+            <li style={{ fontSize: 13, display: 'flex', alignItems: 'center', gap: 8, color: 'var(--text)' }}>
               <Check size={14} color="var(--accent)" /> Export to CSV/PDF
             </li>
           </ul>

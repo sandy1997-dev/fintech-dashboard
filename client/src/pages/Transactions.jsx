@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import { Search, Plus, Filter, ArrowUpDown, Trash2, Edit2 } from 'lucide-react';
+import React, { useState } from 'react';
+import { Search, Plus, Filter, ArrowUpDown, Trash2, Edit2, Download, FileText } from 'lucide-react';
 import { MOCK_TRANSACTIONS, MOCK_CATEGORIES } from '../data/mockData';
 import { fmtFull, fmtDate } from '../utils/format';
 
-export default function Transactions() {
+export default function Transactions({ isPro }) {
   const [txns, setTxns] = useState(MOCK_TRANSACTIONS);
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('all');
@@ -27,6 +27,18 @@ export default function Transactions() {
 
   const del = (id) => setTxns(txns.filter(t => t.id !== id));
 
+  const exportCSV = () => {
+    if(!isPro) return alert("Upgrade to PRO to export data!");
+    const headers = "Date,Description,Category,Amount\n";
+    const data = txns.map(t => `${t.date},${t.description},${t.category_name},${t.amount}`).join("\n");
+    const blob = new Blob([headers + data], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'fintrack_report.csv';
+    link.click();
+  };
+
   const inputStyle = {
     background: 'var(--surface2)', border: '1px solid var(--border2)',
     color: 'var(--text)', borderRadius: 8, padding: '8px 12px',
@@ -34,25 +46,33 @@ export default function Transactions() {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, color: 'var(--text)' }} className="fade-up fade-up-1">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 700, letterSpacing: '-0.02em' }}>Transactions</h1>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--text)' }}>Transactions</h1>
           <p style={{ color: 'var(--muted)', fontSize: 13, marginTop: 2 }}>{filtered.length} transactions found</p>
         </div>
-        <button onClick={() => setShowAdd(!showAdd)} style={{
-          background: 'var(--accent)', color: '#fff', borderRadius: 8,
-          padding: '8px 14px', fontSize: 12, fontWeight: 600,
-          display: 'flex', alignItems: 'center', gap: 6,
-        }}>
-          <Plus size={14} /> Add Transaction
-        </button>
+        
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button onClick={exportCSV} style={{ background: 'var(--surface2)', color: 'var(--text)', borderRadius: 8, padding: '8px 12px', fontSize: 12, display: 'flex', alignItems: 'center', gap: 6, border: '1px solid var(--border)' }}>
+            <Download size={14} /> CSV
+          </button>
+          <button onClick={() => window.print()} style={{ background: 'var(--surface2)', color: 'var(--text)', borderRadius: 8, padding: '8px 12px', fontSize: 12, display: 'flex', alignItems: 'center', gap: 6, border: '1px solid var(--border)' }}>
+            <FileText size={14} /> PDF
+          </button>
+          <button onClick={() => setShowAdd(!showAdd)} style={{
+            background: 'var(--accent)', color: '#fff', borderRadius: 8,
+            padding: '8px 14px', fontSize: 12, fontWeight: 600,
+            display: 'flex', alignItems: 'center', gap: 6,
+          }}>
+            <Plus size={14} /> Add Transaction
+          </button>
+        </div>
       </div>
 
-      {/* Add Form */}
       {showAdd && (
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)', padding: 20 }}>
-          <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 600, marginBottom: 14 }}>New Transaction</h3>
+          <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 600, marginBottom: 14, color: 'var(--text)' }}>New Transaction</h3>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, marginBottom: 10 }}>
             <div><label style={{ fontSize: 10, color: 'var(--muted)', display: 'block', marginBottom: 4 }}>DESCRIPTION</label>
               <input style={inputStyle} value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} placeholder="e.g. Grocery shopping" /></div>
@@ -73,7 +93,7 @@ export default function Transactions() {
               <input style={inputStyle} type="date" value={form.date} onChange={e => setForm({ ...form, date: e.target.value })} /></div>
           </div>
           <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
-            <button onClick={() => setShowAdd(false)} style={{ padding: '7px 14px', borderRadius: 7, background: 'var(--surface2)', color: 'var(--muted)', fontSize: 12 }}>Cancel</button>
+            <button onClick={() => setShowAdd(false)} style={{ padding: '7px 14px', borderRadius: 7, background: 'var(--surface2)', color: 'var(--text)', fontSize: 12 }}>Cancel</button>
             <button onClick={addTxn} style={{ padding: '7px 14px', borderRadius: 7, background: 'var(--accent)', color: '#fff', fontSize: 12, fontWeight: 600 }}>Add</button>
           </div>
         </div>
@@ -92,7 +112,7 @@ export default function Transactions() {
           <button key={f} onClick={() => setFilter(f)} style={{
             padding: '7px 14px', borderRadius: 8, fontSize: 12, fontWeight: 500, textTransform: 'capitalize',
             background: filter === f ? 'var(--accent)' : 'var(--surface)',
-            color: filter === f ? '#fff' : 'var(--muted)',
+            color: filter === f ? '#fff' : 'var(--text)',
             border: `1px solid ${filter === f ? 'transparent' : 'var(--border)'}`,
           }}>{f}</button>
         ))}
@@ -112,7 +132,7 @@ export default function Transactions() {
             {filtered.map((t, i) => (
               <tr key={t.id} style={{ borderTop: i > 0 ? '1px solid var(--border)' : 'none' }}>
                 <td style={{ padding: '11px 16px', fontSize: 11, color: 'var(--muted)', fontFamily: 'var(--font-mono)', whiteSpace: 'nowrap' }}>{fmtDate(t.date)}</td>
-                <td style={{ padding: '11px 16px', fontSize: 12, fontWeight: 500 }}>{t.description}</td>
+                <td style={{ padding: '11px 16px', fontSize: 12, fontWeight: 500, color: 'var(--text)' }}>{t.description}</td>
                 <td style={{ padding: '11px 16px' }}>
                   <span style={{
                     display: 'inline-flex', alignItems: 'center', gap: 5,
@@ -128,7 +148,7 @@ export default function Transactions() {
                   {t.type === 'income' ? '+' : '-'}{fmtFull(t.amount)}
                 </td>
                 <td style={{ padding: '11px 16px' }}>
-                  <button onClick={() => del(t.id)} style={{ background: 'transparent', color: 'var(--muted)', padding: 4, borderRadius: 5, display: 'flex', alignItems: 'center' }}>
+                  <button onClick={() => del(t.id)} style={{ background: 'transparent', color: 'var(--muted)', padding: 4, borderRadius: 5, display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
                     <Trash2 size={12} />
                   </button>
                 </td>

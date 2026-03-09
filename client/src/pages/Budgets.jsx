@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Plus, Target } from 'lucide-react';
 import { MOCK_BUDGETS, MOCK_CATEGORIES } from '../data/mockData';
 import BudgetBar from '../components/BudgetBar';
@@ -25,13 +25,13 @@ export default function Budgets() {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, color: 'var(--text)' }} className="fade-up fade-up-1">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 700, letterSpacing: '-0.02em' }}>Budgets</h1>
-          <p style={{ color: 'var(--muted)', fontSize: 13, marginTop: 2 }}>January 2024 · {budgets.length} budget categories</p>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--text)' }}>Budgets</h1>
+          <p style={{ color: 'var(--muted)', fontSize: 13, marginTop: 2 }}>{budgets.length} budget categories active</p>
         </div>
-        <button onClick={() => setShowAdd(!showAdd)} style={{ background: 'var(--accent)', color: '#fff', borderRadius: 8, padding: '8px 14px', fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
+        <button onClick={() => setShowAdd(!showAdd)} style={{ background: 'var(--accent)', color: '#fff', borderRadius: 8, padding: '8px 14px', fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer' }}>
           <Plus size={14} /> New Budget
         </button>
       </div>
@@ -53,7 +53,7 @@ export default function Budgets() {
       {/* Overall progress */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)', padding: '20px 24px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
-          <span style={{ fontSize: 13, fontWeight: 600 }}>Overall Budget Usage</span>
+          <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>Overall Budget Usage</span>
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--muted)' }}>{Math.round((totalSpent / totalBudgeted) * 100)}%</span>
         </div>
         <div style={{ height: 8, background: 'var(--border)', borderRadius: 4, overflow: 'hidden' }}>
@@ -64,7 +64,7 @@ export default function Budgets() {
       {/* Add form */}
       {showAdd && (
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)', padding: 20 }}>
-          <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 600, marginBottom: 14 }}>New Budget</h3>
+          <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 600, marginBottom: 14, color: 'var(--text)' }}>New Budget</h3>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 12 }}>
             <div><label style={{ fontSize: 10, color: 'var(--muted)', display: 'block', marginBottom: 4 }}>CATEGORY</label>
               <select style={inputStyle} value={form.category_id} onChange={e => setForm({ ...form, category_id: e.target.value })}>
@@ -74,8 +74,8 @@ export default function Budgets() {
               <input style={inputStyle} type="number" value={form.amount} onChange={e => setForm({ ...form, amount: e.target.value })} placeholder="500" /></div>
           </div>
           <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
-            <button onClick={() => setShowAdd(false)} style={{ padding: '7px 14px', borderRadius: 7, background: 'var(--surface2)', color: 'var(--muted)', fontSize: 12 }}>Cancel</button>
-            <button onClick={addBudget} style={{ padding: '7px 14px', borderRadius: 7, background: 'var(--accent)', color: '#fff', fontSize: 12, fontWeight: 600 }}>Create</button>
+            <button onClick={() => setShowAdd(false)} style={{ padding: '7px 14px', borderRadius: 7, background: 'var(--surface2)', color: 'var(--text)', fontSize: 12, cursor: 'pointer' }}>Cancel</button>
+            <button onClick={addBudget} style={{ padding: '7px 14px', borderRadius: 7, background: 'var(--accent)', color: '#fff', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>Create</button>
           </div>
         </div>
       )}

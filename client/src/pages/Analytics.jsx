@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import { MOCK_TREND, MOCK_BY_CATEGORY, MOCK_SUMMARY } from '../data/mockData';
 import TrendChart from '../components/TrendChart';
@@ -62,7 +62,7 @@ function MonthlyTable({ data }) {
           const rate = ((net / row.income) * 100).toFixed(0);
           return (
             <tr key={i} style={{ borderTop: i > 0 ? '1px solid var(--border)' : 'none' }}>
-              <td style={{ padding: '9px 12px', fontSize: 12, color: 'var(--muted)', fontFamily: 'var(--font-mono)' }}>{row.label}</td>
+              <td style={{ padding: '9px 12px', fontSize: 12, color: 'var(--text)', fontFamily: 'var(--font-mono)' }}>{row.label}</td>
               <td style={{ padding: '9px 12px', fontSize: 12, fontFamily: 'var(--font-mono)', color: 'var(--green)' }}>{fmt(row.income)}</td>
               <td style={{ padding: '9px 12px', fontSize: 12, fontFamily: 'var(--font-mono)', color: 'var(--red)' }}>{fmt(row.expenses)}</td>
               <td style={{ padding: '9px 12px', fontSize: 12, fontFamily: 'var(--font-mono)', color: net >= 0 ? 'var(--green)' : 'var(--red)', fontWeight: 600 }}>{fmt(net)}</td>
@@ -81,7 +81,7 @@ const card = (title, sub, children) => (
   <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)' }}>
     <div style={{ padding: '18px 20px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
       <div>
-        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 600 }}>{title}</h2>
+        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>{title}</h2>
         {sub && <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>{sub}</p>}
       </div>
     </div>
@@ -95,9 +95,9 @@ export default function Analytics() {
   const avgExpenses = MOCK_TREND.reduce((a, d) => a + d.expenses, 0) / MOCK_TREND.length;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, color: 'var(--text)' }} className="fade-up fade-up-1">
       <div>
-        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 700, letterSpacing: '-0.02em' }}>Analytics</h1>
+        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--text)' }}>Analytics</h1>
         <p style={{ color: 'var(--muted)', fontSize: 13, marginTop: 2 }}>Deep dive into your financial patterns</p>
       </div>
 
