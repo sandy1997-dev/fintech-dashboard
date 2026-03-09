@@ -12,18 +12,17 @@ import Signup from './pages/Signup';
 import Layout from './components/Layout';
 
 export default function App() {
-  // 1. SAFER INITIALIZATION: Check for "undefined" strings before parsing
+  // 1. SAFER INITIALIZATION
   const [user, setUser] = useState(() => {
     try {
       const savedUser = localStorage.getItem('user');
-      // Only parse if it exists and isn't the literal word "undefined"
       if (savedUser && savedUser !== 'undefined') {
         return JSON.parse(savedUser);
       }
     } catch (error) {
       console.error("Failed to parse user data:", error);
     }
-    return null; // Fallback to null if anything goes wrong
+    return null;
   });
 
   const [isPro, setIsPro] = useState(localStorage.getItem('pro') === 'true');
@@ -34,7 +33,7 @@ export default function App() {
     localStorage.setItem('theme', theme);
   }, [theme]);
 
-  // 2. SAFER SAVING: Never let empty data poison the local storage
+  // 2. SAFER SAVING
   const handleAuth = (userData) => {
     if (!userData) return; 
     setUser(userData);
@@ -53,6 +52,13 @@ export default function App() {
     alert("Upgrade Successful! You are now a PRO user.");
   };
 
+  // 3. NEW: CANCEL PRO PLAN LOGIC
+  const cancelPro = () => {
+    setIsPro(false);
+    localStorage.setItem('pro', 'false');
+    alert("Your Pro plan has been canceled. You are now on the Basic plan.");
+  };
+
   return (
     <BrowserRouter>
       <Routes>
@@ -69,7 +75,10 @@ export default function App() {
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/profile" element={<Profile user={user} setUser={handleAuth} />} />
             <Route path="/settings" element={<SettingsPage theme={theme} setTheme={setTheme} />} />
-            <Route path="/subscription" element={<Subscription isPro={isPro} onActivate={upgradePro} />} />
+            
+            {/* 👈 FIX: Added onCancel={cancelPro} to the Subscription route */}
+            <Route path="/subscription" element={<Subscription isPro={isPro} onActivate={upgradePro} onCancel={cancelPro} />} />
+            
             <Route path="/" element={<Navigate to="/dashboard" />} />
           </Route>
         ) : (

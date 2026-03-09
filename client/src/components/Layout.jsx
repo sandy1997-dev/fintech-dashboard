@@ -8,7 +8,7 @@ import {
   Settings, 
   TrendingUp, 
   LogOut,
-  CreditCard 
+  Calendar 
 } from 'lucide-react';
 
 const navItems = [
@@ -18,7 +18,7 @@ const navItems = [
   { to: '/analytics', icon: BarChart3, label: 'Analytics' },
 ];
 
-export default function Layout({ user, onLogout }) {
+export default function Layout({ user, isPro, onLogout }) {
   const navigate = useNavigate();
 
   return (
@@ -57,7 +57,7 @@ export default function Layout({ user, onLogout }) {
             </NavLink>
           ))}
           
-          {/* Settings Nav Item (Alternative to Top Bar icon) */}
+          {/* Settings Nav Item */}
           <NavLink to="/settings" style={({ isActive }) => ({
               display: 'flex', alignItems: 'center', gap: 10,
               padding: '10px 12px', borderRadius: 8, textDecoration: 'none',
@@ -85,17 +85,19 @@ export default function Layout({ user, onLogout }) {
               width: 32, height: 32, borderRadius: '50%',
               background: 'linear-gradient(135deg, var(--accent), #ec4899)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 12, fontWeight: 700, color: '#fff', flexShrink: 0,
+              fontSize: 12, fontWeight: 700, 
+              color: '#ffffff', /* Hardcoded to white so it never vanishes */
+              flexShrink: 0,
             }}>
-              {user?.name ? user.name.split(' ').map(n => n[0]).join('') : 'U'}
+              {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
             </div>
             <div style={{ overflow: 'hidden', flex: 1 }}>
               <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{user?.name || 'User'}</div>
               <div 
                 onClick={(e) => { e.stopPropagation(); navigate('/subscription'); }}
-                style={{ fontSize: 11, color: 'var(--accent2)', fontWeight: 600, cursor: 'pointer' }}
+                style={{ fontSize: 11, color: isPro ? 'var(--green)' : 'var(--accent2)', fontWeight: 600, cursor: 'pointer' }}
               >
-                Pro Plan
+                {isPro ? 'Pro Plan' : 'Basic Plan'}
               </div>
             </div>
           </div>
@@ -115,7 +117,7 @@ export default function Layout({ user, onLogout }) {
         </div>
       </aside>
 
-      {/* Main */}
+      {/* Main Content Area */}
       <main style={{ flex: 1, marginLeft: 220, minHeight: '100vh', background: 'var(--bg)' }}>
         {/* Top bar */}
         <header style={{
@@ -124,6 +126,15 @@ export default function Layout({ user, onLogout }) {
           padding: '0 28px', gap: 12, position: 'sticky', top: 0,
           background: 'var(--bg)', zIndex: 50,
         }}>
+          
+          <button style={{
+            width: 34, height: 34, borderRadius: 8, background: 'var(--surface)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            color: 'var(--muted)', border: '1px solid var(--border)', cursor: 'pointer'
+          }}>
+            <Calendar size={15} />
+          </button>
+          
           <button style={{
             width: 34, height: 34, borderRadius: 8, background: 'var(--surface)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -145,7 +156,7 @@ export default function Layout({ user, onLogout }) {
 
           <div style={{ height: 24, width: 1, background: 'var(--border)' }} />
           <span style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
-            March 2026
+            {new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
           </span>
         </header>
 

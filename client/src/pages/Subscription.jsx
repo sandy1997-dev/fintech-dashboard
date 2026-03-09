@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Check, Zap, Shield, Loader2 } from "lucide-react";
+import { Check, Zap, Shield } from "lucide-react";
 
-export default function Subscription({ isPro, onActivate }) {
+export default function Subscription({ isPro, onActivate, onCancel }) {
   const [isPurchasing, setIsPurchasing] = useState(false);
 
   const handlePurchase = async () => {
@@ -11,7 +11,7 @@ export default function Subscription({ isPro, onActivate }) {
     
     // Simulate a 1.5 second "Payment Processing" delay
     setTimeout(() => {
-      onActivate(); // This calls the upgrade function in App.js
+      onActivate(); // This calls the upgrade function in App.jsx
       setIsPurchasing(false);
     }, 1500);
   };
@@ -155,6 +155,24 @@ export default function Subscription({ isPro, onActivate }) {
               "Upgrade Now"
             )}
           </button>
+
+          {/* Cancel Button - Only shows if they are Pro */}
+          {isPro && (
+            <button
+              onClick={() => {
+                if(window.confirm("Are you sure you want to cancel your Pro plan? You will lose access to advanced features immediately.")) {
+                  if(onCancel) onCancel();
+                }
+              }}
+              style={{
+                width: "100%", padding: "12px", borderRadius: 12,
+                background: "transparent", color: "var(--red)", border: "1px solid var(--red)",
+                fontWeight: 600, fontSize: 13, cursor: "pointer", marginTop: 12
+              }}
+            >
+              Cancel Subscription
+            </button>
+          )}
         </div>
       </div>
       
