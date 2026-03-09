@@ -28,7 +28,7 @@ export default function Layout({ user, isPro, onLogout }) {
 
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date()), 1000);
-    return () => clearInterval(timer); // Cleanup on unmount
+    return () => clearInterval(timer);
   }, []);
 
   const formattedDate = time.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
@@ -118,16 +118,23 @@ export default function Layout({ user, isPro, onLogout }) {
             </div>
           </div>
           
+          {/* FIXED LOGOUT BUTTON */}
           <button 
             onClick={onLogout}
             style={{
               width: '100%', display: 'flex', alignItems: 'center', gap: 10,
-              padding: '10px 12px', borderRadius: 8, border: 'none',
-              background: 'transparent', color: 'var(--red)', fontSize: 13,
-              fontWeight: 600, cursor: 'pointer', marginTop: 8, transition: '0.2s'
+              padding: '10px 12px', borderRadius: 8, border: '1px solid rgba(239, 68, 68, 0.2)',
+              background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', fontSize: 13,
+              fontWeight: 700, cursor: 'pointer', marginTop: 12, transition: '0.2s'
             }}
-            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(248, 113, 113, 0.1)'}
-            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'rgba(239, 68, 68, 0.2)';
+              e.currentTarget.style.transform = 'translateY(-1px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'rgba(239, 68, 68, 0.1)';
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}
           >
             <LogOut size={16} />
             Logout

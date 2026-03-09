@@ -1,5 +1,5 @@
 import { TrendingUp, TrendingDown, Wallet, Activity, ArrowUpRight } from 'lucide-react';
-import { Link } from 'react-router-dom'; // Added this
+import { Link } from 'react-router-dom';
 import { MOCK_SUMMARY, MOCK_TREND, MOCK_BY_CATEGORY, MOCK_TRANSACTIONS, MOCK_BUDGETS } from '../data/mockData';
 import StatCard from '../components/StatCard';
 import TrendChart from '../components/TrendChart';
@@ -27,7 +27,8 @@ export default function Dashboard() {
       <div className="fade-up fade-up-1">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 4 }}>
           <div>
-            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 700, letterSpacing: '-0.02em' }}>
+            {/* FIXED TEXT COLOR HERE */}
+            <h1 style={{ color: 'var(--text)', fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 700, letterSpacing: '-0.02em' }}>
               Good morning, Alex 👋
             </h1>
             <p style={{ color: 'var(--muted)', fontSize: 13, marginTop: 2 }}>Here's your financial overview for March 2026</p>
@@ -55,7 +56,7 @@ export default function Dashboard() {
         {card(
           <>
             <div style={{ padding: '18px 20px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 600 }}>Income vs Expenses</h2>
+              <h2 style={{ color: 'var(--text)', fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 600 }}>Income vs Expenses</h2>
               <span style={{ fontSize: 10, color: 'var(--muted)', fontFamily: 'var(--font-mono)' }}>Last 6 months</span>
             </div>
             <div style={{ padding: '12px 20px 18px' }}>
@@ -66,7 +67,7 @@ export default function Dashboard() {
         {card(
           <>
             <div style={{ padding: '18px 20px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 600 }}>Spending by Category</h2>
+              <h2 style={{ color: 'var(--text)', fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 600 }}>Spending by Category</h2>
             </div>
             <div style={{ padding: '16px 20px 18px' }}>
               <DonutChart data={MOCK_BY_CATEGORY} />
@@ -81,8 +82,7 @@ export default function Dashboard() {
         {card(
           <>
             <div style={{ padding: '18px 20px 12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 600 }}>Recent Transactions</h2>
-              {/* Changed <a> to <Link> */}
+              <h2 style={{ color: 'var(--text)', fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 600 }}>Recent Transactions</h2>
               <Link to="/transactions" style={{ fontSize: 11, color: 'var(--accent2)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 3, fontWeight: 600 }}>
                 View all <ArrowUpRight size={11} />
               </Link>
@@ -101,7 +101,7 @@ export default function Dashboard() {
                     <div style={{ width: 8, height: 8, borderRadius: 2, background: t.color }} />
                   </div>
                   <div style={{ flex: 1, overflow: 'hidden' }}>
-                    <div style={{ fontSize: 12, fontWeight: 500, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{t.description}</div>
+                    <div style={{ color: 'var(--text)', fontSize: 12, fontWeight: 500, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{t.description}</div>
                     <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 1 }}>{t.merchant} · {fmtDate(t.date)}</div>
                   </div>
                   <span style={{
@@ -120,8 +120,7 @@ export default function Dashboard() {
         {card(
           <>
             <div style={{ padding: '18px 20px 12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 600 }}>Budget Progress</h2>
-              {/* Changed <a> to <Link> */}
+              <h2 style={{ color: 'var(--text)', fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 600 }}>Budget Progress</h2>
               <Link to="/budgets" style={{ fontSize: 11, color: 'var(--accent2)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 3, fontWeight: 600 }}>
                 Manage <ArrowUpRight size={11} />
               </Link>
