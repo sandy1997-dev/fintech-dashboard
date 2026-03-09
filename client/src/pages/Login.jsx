@@ -1,13 +1,21 @@
 import React, { useState } from 'react';
 import { TrendingUp, ShieldCheck, Zap, Globe } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom'; // 👈 We must import Link and useNavigate
 
 export default function Login({ onLogin }) {
   const [email, setEmail] = useState('alex@fintrack.io');
   const [password, setPassword] = useState('password123');
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onLogin(); // Triggers the state change in App.jsx
+    if (!email || !password) return alert("Please enter your details.");
+    
+    // Pass the user data back to App.jsx to save in LocalStorage
+    onLogin({ name: 'Alex Morgan', email: email }); 
+    
+    // Force the redirect to dashboard
+    navigate('/dashboard');
   };
 
   return (
@@ -87,8 +95,9 @@ export default function Login({ onLogin }) {
             </button>
           </form>
 
+          {/* 👈 FIX: This is now a real React Router Link */}
           <p style={{ textAlign: 'center', fontSize: 13, color: 'var(--muted)', marginTop: 24 }}>
-            Don't have an account? <span style={{ color: 'var(--accent2)', fontWeight: 600, cursor: 'pointer' }}>Get started for free</span>
+            Don't have an account? <Link to="/signup" style={{ color: 'var(--accent2)', fontWeight: 600, textDecoration: 'none' }}>Get started for free</Link>
           </p>
         </div>
       </div>
