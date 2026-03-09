@@ -8,12 +8,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "autoprefixer": "^10.4.27",
     "d3": "^7.9.0",
     "date-fns": "^3.0.6",
     "lucide-react": "^0.344.0",
+    "postcss": "^8.5.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.21.3"
+    "react-router-dom": "^6.21.3",
+    "tailwindcss": "^4.2.1"
   },
   "devDependencies": {
     "@types/d3": "^7.4.3",
