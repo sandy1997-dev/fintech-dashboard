@@ -8,11 +8,24 @@ import Profile from './pages/Profile';
 import SettingsPage from './pages/Settings';
 import Subscription from './pages/Subscription';
 import Login from './pages/Login';
-import Signup from './pages/Signup'; // 👈 Added
+import Signup from './pages/Signup';
 import Layout from './components/Layout';
 
 export default function App() {
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
+  // 1. SAFER INITIALIZATION: Check for "undefined" strings before parsing
+  const [user, setUser] = useState(() => {
+    try {
+      const savedUser = localStorage.getItem('user');
+      // Only parse if it exists and isn't the literal word "undefined"
+      if (savedUser && savedUser !== 'undefined') {
+        return JSON.parse(savedUser);
+      }
+    } catch (error) {
+      console.error("Failed to parse user data:", error);
+    }
+    return null; // Fallback to null if anything goes wrong
+  });
+
   const [isPro, setIsPro] = useState(localStorage.getItem('pro') === 'true');
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
 
@@ -21,7 +34,9 @@ export default function App() {
     localStorage.setItem('theme', theme);
   }, [theme]);
 
+  // 2. SAFER SAVING: Never let empty data poison the local storage
   const handleAuth = (userData) => {
+    if (!userData) return; 
     setUser(userData);
     localStorage.setItem('user', JSON.stringify(userData));
   };
@@ -29,13 +44,12 @@ export default function App() {
   const handleLogout = () => {
     setUser(null);
     localStorage.removeItem('user');
-    window.location.href = '/login'; // 👈 Hard redirect to clear URL state
+    window.location.href = '/login'; 
   };
 
   const upgradePro = () => {
     setIsPro(true);
     localStorage.setItem('pro', 'true');
-    // We don't want to "stuck" here, so we show a success toast or alert
     alert("Upgrade Successful! You are now a PRO user.");
   };
 
