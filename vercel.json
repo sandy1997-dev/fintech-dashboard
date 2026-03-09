@@ -1,6 +1,4 @@
 {
-  "framework": "vite",
-  "rootDirectory": "client",
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ]
