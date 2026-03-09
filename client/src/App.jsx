@@ -12,7 +12,6 @@ import Signup from './pages/Signup';
 import Layout from './components/Layout';
 
 export default function App() {
-  // 1. SAFER INITIALIZATION
   const [user, setUser] = useState(() => {
     try {
       const savedUser = localStorage.getItem('user');
@@ -33,17 +32,16 @@ export default function App() {
     localStorage.setItem('theme', theme);
   }, [theme]);
 
-  // 2. SAFER SAVING
   const handleAuth = (userData) => {
     if (!userData) return; 
     setUser(userData);
     localStorage.setItem('user', JSON.stringify(userData));
   };
 
+  // 👈 THE FIX IS HERE
   const handleLogout = () => {
     setUser(null);
     localStorage.removeItem('user');
-    window.location.href = '/login'; 
   };
 
   const upgradePro = () => {
@@ -52,7 +50,6 @@ export default function App() {
     alert("Upgrade Successful! You are now a PRO user.");
   };
 
-  // 3. NEW: CANCEL PRO PLAN LOGIC
   const cancelPro = () => {
     setIsPro(false);
     localStorage.setItem('pro', 'false');
@@ -75,10 +72,7 @@ export default function App() {
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/profile" element={<Profile user={user} setUser={handleAuth} />} />
             <Route path="/settings" element={<SettingsPage theme={theme} setTheme={setTheme} />} />
-            
-            {/* 👈 FIX: Added onCancel={cancelPro} to the Subscription route */}
             <Route path="/subscription" element={<Subscription isPro={isPro} onActivate={upgradePro} onCancel={cancelPro} />} />
-            
             <Route path="/" element={<Navigate to="/dashboard" />} />
           </Route>
         ) : (
