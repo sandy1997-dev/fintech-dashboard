@@ -8,52 +8,58 @@ import Profile from './pages/Profile';
 import SettingsPage from './pages/Settings';
 import Subscription from './pages/Subscription';
 import Login from './pages/Login';
+import Signup from './pages/Signup'; // 👈 Added
 import Layout from './components/Layout';
 
 export default function App() {
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem('fintrack_user')));
-  const [isPro, setIsPro] = useState(localStorage.getItem('fintrack_pro') === 'true');
-  const [theme, setTheme] = useState(localStorage.getItem('fintrack_theme') || 'dark');
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
+  const [isPro, setIsPro] = useState(localStorage.getItem('pro') === 'true');
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
 
-  // Handle Theme Switching
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('fintrack_theme', theme);
+    localStorage.setItem('theme', theme);
   }, [theme]);
 
-  const handleLogin = (userData) => {
-    const data = userData || { name: 'Alex Morgan', email: 'alex@fintrack.io' };
-    setUser(data);
-    localStorage.setItem('fintrack_user', JSON.stringify(data));
+  const handleAuth = (userData) => {
+    setUser(userData);
+    localStorage.setItem('user', JSON.stringify(userData));
   };
 
   const handleLogout = () => {
     setUser(null);
-    localStorage.removeItem('fintrack_user');
+    localStorage.removeItem('user');
+    window.location.href = '/login'; // 👈 Hard redirect to clear URL state
   };
 
-  const togglePro = () => {
+  const upgradePro = () => {
     setIsPro(true);
-    localStorage.setItem('fintrack_pro', 'true');
+    localStorage.setItem('pro', 'true');
+    // We don't want to "stuck" here, so we show a success toast or alert
+    alert("Upgrade Successful! You are now a PRO user.");
   };
 
   return (
     <BrowserRouter>
       <Routes>
-        {!user ? (
-          <Route path="*" element={<Login onLogin={handleLogin} />} />
-        ) : (
+        {/* Auth Routes */}
+        <Route path="/login" element={user ? <Navigate to="/dashboard" /> : <Login onLogin={handleAuth} />} />
+        <Route path="/signup" element={user ? <Navigate to="/dashboard" /> : <Signup onSignup={handleAuth} />} />
+
+        {/* Protected Dashboard Routes */}
+        {user ? (
           <Route element={<Layout user={user} isPro={isPro} onLogout={handleLogout} />}>
-            <Route index element={<Navigate to="/dashboard" replace />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/transactions" element={<Transactions isPro={isPro} />} />
             <Route path="/budgets" element={<Budgets />} />
             <Route path="/analytics" element={<Analytics />} />
-            <Route path="/profile" element={<Profile user={user} setUser={handleLogin} />} />
+            <Route path="/profile" element={<Profile user={user} setUser={handleAuth} />} />
             <Route path="/settings" element={<SettingsPage theme={theme} setTheme={setTheme} />} />
-            <Route path="/subscription" element={<Subscription isPro={isPro} onActivate={togglePro} />} />
-            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/subscription" element={<Subscription isPro={isPro} onActivate={upgradePro} />} />
+            <Route path="/" element={<Navigate to="/dashboard" />} />
           </Route>
+        ) : (
+          <Route path="*" element={<Navigate to="/login" />} />
         )}
       </Routes>
     </BrowserRouter>
