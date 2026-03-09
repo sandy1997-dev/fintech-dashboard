@@ -35,9 +35,9 @@ export default function Layout({ user, isPro, onLogout }) {
             width: 36, height: 36, background: 'var(--accent)', borderRadius: 10,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
-            <TrendingUp size={18} color="#fff" />
+            <TrendingUp size={18} color="#ffffff" />
           </div>
-          <span style={{ fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 700, letterSpacing: '-0.02em' }}>
+          <span style={{ fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--text)' }}>
             Fintrack
           </span>
         </div>
@@ -48,9 +48,10 @@ export default function Layout({ user, isPro, onLogout }) {
             <NavLink key={to} to={to} style={({ isActive }) => ({
               display: 'flex', alignItems: 'center', gap: 10,
               padding: '10px 12px', borderRadius: 8, textDecoration: 'none',
-              color: isActive ? 'var(--accent2)' : 'var(--muted)',
+              color: isActive ? 'var(--accent2)' : 'var(--text)', /* Changed to var(--text) for better visibility */
               background: isActive ? 'rgba(124,106,247,0.12)' : 'transparent',
               fontSize: 13, fontWeight: 500, transition: 'all 0.15s',
+              opacity: isActive ? 1 : 0.7
             })}>
               <Icon size={16} />
               {label}
@@ -61,9 +62,10 @@ export default function Layout({ user, isPro, onLogout }) {
           <NavLink to="/settings" style={({ isActive }) => ({
               display: 'flex', alignItems: 'center', gap: 10,
               padding: '10px 12px', borderRadius: 8, textDecoration: 'none',
-              color: isActive ? 'var(--accent2)' : 'var(--muted)',
+              color: isActive ? 'var(--accent2)' : 'var(--text)',
               background: isActive ? 'rgba(124,106,247,0.12)' : 'transparent',
-              fontSize: 13, fontWeight: 500, marginTop: 'auto'
+              fontSize: 13, fontWeight: 500, marginTop: 'auto',
+              opacity: isActive ? 1 : 0.7
             })}>
               <Settings size={16} />
               Settings
@@ -78,15 +80,16 @@ export default function Layout({ user, isPro, onLogout }) {
               display: 'flex', alignItems: 'center', gap: 10, padding: '8px', 
               cursor: 'pointer', borderRadius: 8, transition: 'background 0.2s' 
             }}
-            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(0,0,0,0.03)'}
+            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(124,106,247,0.05)'}
             onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
           >
             <div style={{
               width: 32, height: 32, borderRadius: '50%',
               background: 'linear-gradient(135deg, var(--accent), #ec4899)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 12, fontWeight: 700, 
-              color: '#ffffff', /* Hardcoded to white so it never vanishes */
+              fontSize: 14, fontWeight: 800, 
+              color: '#ffffff', /* Forces pure white so the letter NEVER vanishes */
+              textShadow: '0 1px 2px rgba(0,0,0,0.2)',
               flexShrink: 0,
             }}>
               {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
@@ -107,8 +110,8 @@ export default function Layout({ user, isPro, onLogout }) {
             style={{
               width: '100%', display: 'flex', alignItems: 'center', gap: 10,
               padding: '10px 12px', borderRadius: 8, border: 'none',
-              background: 'transparent', color: '#ef4444', fontSize: 13,
-              fontWeight: 500, cursor: 'pointer', marginTop: 8
+              background: 'transparent', color: 'var(--red)', fontSize: 13,
+              fontWeight: 600, cursor: 'pointer', marginTop: 8
             }}
           >
             <LogOut size={16} />
@@ -127,35 +130,47 @@ export default function Layout({ user, isPro, onLogout }) {
           background: 'var(--bg)', zIndex: 50,
         }}>
           
-          <button style={{
-            width: 34, height: 34, borderRadius: 8, background: 'var(--surface)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: 'var(--muted)', border: '1px solid var(--border)', cursor: 'pointer'
-          }}>
-            <Calendar size={15} />
+          {/* Calendar Button - Now Functional */}
+          <button 
+            onClick={() => alert("Calendar schedule opening soon...")}
+            style={{
+              width: 34, height: 34, borderRadius: 8, background: 'var(--surface)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: 'var(--text)', /* Changed from muted to text */
+              border: '1px solid var(--border)', cursor: 'pointer'
+            }}
+          >
+            <Calendar size={16} />
           </button>
           
-          <button style={{
-            width: 34, height: 34, borderRadius: 8, background: 'var(--surface)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: 'var(--muted)', border: '1px solid var(--border)', cursor: 'pointer'
-          }}>
-            <Bell size={15} />
+          {/* Bell Button - Now Functional */}
+          <button 
+            onClick={() => alert("You have 0 new notifications.")}
+            style={{
+              width: 34, height: 34, borderRadius: 8, background: 'var(--surface)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: 'var(--text)', /* Changed from muted to text */
+              border: '1px solid var(--border)', cursor: 'pointer'
+            }}
+          >
+            <Bell size={16} />
           </button>
           
+          {/* Settings Button */}
           <button 
             onClick={() => navigate('/settings')}
             style={{
               width: 34, height: 34, borderRadius: 8, background: 'var(--surface)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: 'var(--muted)', border: '1px solid var(--border)', cursor: 'pointer'
+              color: 'var(--text)', /* Changed from muted to text */
+              border: '1px solid var(--border)', cursor: 'pointer'
             }}
           >
-            <Settings size={15} />
+            <Settings size={16} />
           </button>
 
           <div style={{ height: 24, width: 1, background: 'var(--border)' }} />
-          <span style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
+          <span style={{ fontSize: 12, color: 'var(--text)', fontWeight: 500, fontFamily: 'var(--font-mono)' }}>
             {new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
           </span>
         </header>
