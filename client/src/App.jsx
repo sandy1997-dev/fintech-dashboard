@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
 import Transactions from './pages/Transactions';
@@ -11,13 +11,31 @@ import Login from './pages/Login';
 import Layout from './components/Layout';
 
 export default function App() {
-  // Logic to handle user state and Pro status
-  const [user, setUser] = useState({ name: 'Alex Morgan', email: 'alex@fintrack.io' });
-  const [isPro, setIsPro] = useState(false);
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('fintrack_user')));
+  const [isPro, setIsPro] = useState(localStorage.getItem('fintrack_pro') === 'true');
+  const [theme, setTheme] = useState(localStorage.getItem('fintrack_theme') || 'dark');
 
-  const handleLogout = () => setUser(null);
-  const handleLogin = () => setUser({ name: 'Alex Morgan', email: 'alex@fintrack.io' });
-  const togglePro = () => setIsPro(true);
+  // Handle Theme Switching
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('fintrack_theme', theme);
+  }, [theme]);
+
+  const handleLogin = (userData) => {
+    const data = userData || { name: 'Alex Morgan', email: 'alex@fintrack.io' };
+    setUser(data);
+    localStorage.setItem('fintrack_user', JSON.stringify(data));
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    localStorage.removeItem('fintrack_user');
+  };
+
+  const togglePro = () => {
+    setIsPro(true);
+    localStorage.setItem('fintrack_pro', 'true');
+  };
 
   return (
     <BrowserRouter>
@@ -28,15 +46,12 @@ export default function App() {
           <Route element={<Layout user={user} isPro={isPro} onLogout={handleLogout} />}>
             <Route index element={<Navigate to="/dashboard" replace />} />
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/transactions" element={<Transactions />} />
+            <Route path="/transactions" element={<Transactions isPro={isPro} />} />
             <Route path="/budgets" element={<Budgets />} />
             <Route path="/analytics" element={<Analytics />} />
-            
-            {/* Real Interactive Pages */}
-            <Route path="/profile" element={<Profile user={user} setUser={setUser} />} />
-            <Route path="/settings" element={<SettingsPage />} />
-            <Route path="/subscription" element={<Subscription isPro={isPro} onUpgrade={togglePro} />} />
-            
+            <Route path="/profile" element={<Profile user={user} setUser={handleLogin} />} />
+            <Route path="/settings" element={<SettingsPage theme={theme} setTheme={setTheme} />} />
+            <Route path="/subscription" element={<Subscription isPro={isPro} onActivate={togglePro} />} />
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Route>
         )}
