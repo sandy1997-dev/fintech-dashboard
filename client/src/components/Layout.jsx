@@ -1,5 +1,15 @@
-import { NavLink, Outlet, useLocation } from 'react-router-dom';
-import { LayoutDashboard, ArrowLeftRight, Target, BarChart3, Bell, Settings, TrendingUp } from 'lucide-react';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { 
+  LayoutDashboard, 
+  ArrowLeftRight, 
+  Target, 
+  BarChart3, 
+  Bell, 
+  Settings, 
+  TrendingUp, 
+  LogOut,
+  CreditCard 
+} from 'lucide-react';
 
 const navItems = [
   { to: '/dashboard', icon: LayoutDashboard, label: 'Overview' },
@@ -8,7 +18,9 @@ const navItems = [
   { to: '/analytics', icon: BarChart3, label: 'Analytics' },
 ];
 
-export default function Layout({ user }) {
+export default function Layout({ user, onLogout }) {
+  const navigate = useNavigate();
+
   return (
     <div style={{ display: 'flex', minHeight: '100vh' }}>
       {/* Sidebar */}
@@ -44,22 +56,62 @@ export default function Layout({ user }) {
               {label}
             </NavLink>
           ))}
+          
+          {/* Settings Nav Item (Alternative to Top Bar icon) */}
+          <NavLink to="/settings" style={({ isActive }) => ({
+              display: 'flex', alignItems: 'center', gap: 10,
+              padding: '10px 12px', borderRadius: 8, textDecoration: 'none',
+              color: isActive ? 'var(--accent2)' : 'var(--muted)',
+              background: isActive ? 'rgba(124,106,247,0.12)' : 'transparent',
+              fontSize: 13, fontWeight: 500, marginTop: 'auto'
+            })}>
+              <Settings size={16} />
+              Settings
+          </NavLink>
         </nav>
 
-        {/* User */}
-        <div style={{ padding: '16px 20px', borderTop: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{
-            width: 32, height: 32, borderRadius: '50%',
-            background: 'linear-gradient(135deg, var(--accent), #ec4899)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 12, fontWeight: 700, color: '#fff', flexShrink: 0,
-          }}>
-            {user.name.split(' ').map(n => n[0]).join('')}
+        {/* User Section & Logout */}
+        <div style={{ padding: '16px 12px', borderTop: '1px solid var(--border)' }}>
+          <div 
+            onClick={() => navigate('/profile')}
+            style={{ 
+              display: 'flex', alignItems: 'center', gap: 10, padding: '8px', 
+              cursor: 'pointer', borderRadius: 8, transition: 'background 0.2s' 
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(0,0,0,0.03)'}
+            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+          >
+            <div style={{
+              width: 32, height: 32, borderRadius: '50%',
+              background: 'linear-gradient(135deg, var(--accent), #ec4899)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 12, fontWeight: 700, color: '#fff', flexShrink: 0,
+            }}>
+              {user?.name ? user.name.split(' ').map(n => n[0]).join('') : 'U'}
+            </div>
+            <div style={{ overflow: 'hidden', flex: 1 }}>
+              <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{user?.name || 'User'}</div>
+              <div 
+                onClick={(e) => { e.stopPropagation(); navigate('/subscription'); }}
+                style={{ fontSize: 11, color: 'var(--accent2)', fontWeight: 600, cursor: 'pointer' }}
+              >
+                Pro Plan
+              </div>
+            </div>
           </div>
-          <div style={{ overflow: 'hidden' }}>
-            <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{user.name}</div>
-            <div style={{ fontSize: 11, color: 'var(--muted)' }}>Pro Plan</div>
-          </div>
+          
+          <button 
+            onClick={onLogout}
+            style={{
+              width: '100%', display: 'flex', alignItems: 'center', gap: 10,
+              padding: '10px 12px', borderRadius: 8, border: 'none',
+              background: 'transparent', color: '#ef4444', fontSize: 13,
+              fontWeight: 500, cursor: 'pointer', marginTop: 8
+            }}
+          >
+            <LogOut size={16} />
+            Logout
+          </button>
         </div>
       </aside>
 
@@ -75,22 +127,25 @@ export default function Layout({ user }) {
           <button style={{
             width: 34, height: 34, borderRadius: 8, background: 'var(--surface)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: 'var(--muted)', border: '1px solid var(--border)',
+            color: 'var(--muted)', border: '1px solid var(--border)', cursor: 'pointer'
           }}>
             <Bell size={15} />
           </button>
-          <button style={{
-            width: 34, height: 34, borderRadius: 8, background: 'var(--surface)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: 'var(--muted)', border: '1px solid var(--border)',
-          }}>
+          
+          <button 
+            onClick={() => navigate('/settings')}
+            style={{
+              width: 34, height: 34, borderRadius: 8, background: 'var(--surface)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: 'var(--muted)', border: '1px solid var(--border)', cursor: 'pointer'
+            }}
+          >
             <Settings size={15} />
           </button>
-          <div style={{
-            height: 24, width: 1, background: 'var(--border)',
-          }} />
+
+          <div style={{ height: 24, width: 1, background: 'var(--border)' }} />
           <span style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
-            Jan 2024
+            March 2026
           </span>
         </header>
 

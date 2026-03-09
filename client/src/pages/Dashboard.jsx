@@ -1,4 +1,5 @@
 import { TrendingUp, TrendingDown, Wallet, Activity, ArrowUpRight } from 'lucide-react';
+import { Link } from 'react-router-dom'; // Added this
 import { MOCK_SUMMARY, MOCK_TREND, MOCK_BY_CATEGORY, MOCK_TRANSACTIONS, MOCK_BUDGETS } from '../data/mockData';
 import StatCard from '../components/StatCard';
 import TrendChart from '../components/TrendChart';
@@ -29,7 +30,7 @@ export default function Dashboard() {
             <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 700, letterSpacing: '-0.02em' }}>
               Good morning, Alex 👋
             </h1>
-            <p style={{ color: 'var(--muted)', fontSize: 13, marginTop: 2 }}>Here's your financial overview for January 2024</p>
+            <p style={{ color: 'var(--muted)', fontSize: 13, marginTop: 2 }}>Here's your financial overview for March 2026</p>
           </div>
           <div style={{
             background: 'rgba(124,106,247,0.1)', border: '1px solid rgba(124,106,247,0.25)',
@@ -81,9 +82,10 @@ export default function Dashboard() {
           <>
             <div style={{ padding: '18px 20px 12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 600 }}>Recent Transactions</h2>
-              <a href="/transactions" style={{ fontSize: 11, color: 'var(--accent)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 3 }}>
+              {/* Changed <a> to <Link> */}
+              <Link to="/transactions" style={{ fontSize: 11, color: 'var(--accent2)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 3, fontWeight: 600 }}>
                 View all <ArrowUpRight size={11} />
-              </a>
+              </Link>
             </div>
             <div>
               {MOCK_TRANSACTIONS.slice(0, 6).map((t, i) => (
@@ -119,9 +121,10 @@ export default function Dashboard() {
           <>
             <div style={{ padding: '18px 20px 12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 600 }}>Budget Progress</h2>
-              <a href="/budgets" style={{ fontSize: 11, color: 'var(--accent)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 3 }}>
+              {/* Changed <a> to <Link> */}
+              <Link to="/budgets" style={{ fontSize: 11, color: 'var(--accent2)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 3, fontWeight: 600 }}>
                 Manage <ArrowUpRight size={11} />
-              </a>
+              </Link>
             </div>
             <div style={{ padding: '0 20px 18px', display: 'flex', flexDirection: 'column', gap: 14 }}>
               {MOCK_BUDGETS.map(b => <BudgetBar key={b.id} budget={b} />)}
